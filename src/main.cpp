@@ -28,11 +28,12 @@ std::string hasData(std::string s) {
 
 int main()
 {
+  cout << "this is a test" << endl << flush;
   uWS::Hub h;
 
   // Create a Kalman Filter instance
   UKF ukf;
-
+  cout << "this is the second test" << endl << flush;
   // used to compute the RMSE later
   Tools tools;
   vector<VectorXd> estimations;
@@ -42,7 +43,6 @@ int main()
     // "42" at the start of the message means there's a websocket message event.
     // The 4 signifies a websocket message
     // The 2 signifies a websocket event
-	  cout << "this is a test" << endl << flush;
     if (length && length > 2 && data[0] == '4' && data[1] == '2')
     {
 
