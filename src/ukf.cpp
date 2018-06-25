@@ -14,6 +14,7 @@ using std::vector;
  * This is scaffolding, do not modify
  */
 UKF::UKF() {
+
   is_initialized_ = false;
   // if this is false, laser measurements will be ignored (except during init)
   use_laser_ = true;
@@ -31,7 +32,7 @@ UKF::UKF() {
   std_a_ = 1;
 
   // Process noise standard deviation yaw acceleration in rad/s^2
-  std_yawdd_ = 1;
+  std_yawdd_ = .5;
   
   //DO NOT MODIFY measurement noise values below these are provided by the sensor manufacturer.
   // Laser measurement noise standard deviation position1 in m
@@ -71,7 +72,7 @@ UKF::UKF() {
   lambda_ = 3 - n_aug_;
 
   //* Predicted sigma dimensions
-  Xsig_pred_(n_x_, n_sig_);
+  Xsig_pred_ = MatrixXd(n_x_, n_sig_);
 
   //* Weights of sigma points
   weights_ = VectorXd(n_sig_);
@@ -100,10 +101,10 @@ UKF::~UKF() {}
 void UKF::NormAng(double *ang) {
 
 	while (*ang > M_PI) *ang -= 2. * M_PI;
-	cout << *ang;
+	//cout << *ang;
 
 	while (*ang < -M_PI) *ang += 2. * M_PI;
-	cout << *ang;
+	//cout << *ang;
 
 }
 
@@ -163,8 +164,8 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 
 		// Done initializing, no need to predict or update
 		is_initialized_ = true;
-	    cout << "Init" << endl;
-		cout << "x_" << x_ << endl;
+	    //cout << "Init" << endl;
+		//cout << "x_" << x_ << endl;
 		return;
 	}
 
@@ -175,12 +176,12 @@ void UKF::ProcessMeasurement(MeasurementPackage meas_package) {
 	Prediction(dt);
 
 	if (meas_package.sensor_type_ == MeasurementPackage::RADAR && use_radar_) {
-		cout << "Radar " << meas_package.raw_measurements_[0] << " " << meas_package.raw_measurements_[1] << endl;
+		//cout << "Radar " << meas_package.raw_measurements_[0] << " " << meas_package.raw_measurements_[1] << endl;
 		UpdateRadar(meas_package);
 	}
 
 	if (meas_package.sensor_type_ == MeasurementPackage::LASER && use_laser_) {
-		cout << "Lidar " << meas_package.raw_measurements_[0] << " " << meas_package.raw_measurements_[1] << endl;
+		//cout << "Lidar " << meas_package.raw_measurements_[0] << " " << meas_package.raw_measurements_[1] << endl;
 		UpdateLidar(meas_package);
 	}
 }
